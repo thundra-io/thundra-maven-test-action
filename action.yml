@@ -1,0 +1,25 @@
+name: "Thundra Maven Test Instrumentation"
+description: "Thundra Maven Test Instrumentation"
+author: "Oguzhan Ozdemir <oguzhan.ozdemir@thundra.io>"
+inputs:
+  apikey:
+    required: true
+    description: "Thundra's API Key"
+  project_id:
+    required: false
+    description: "Thundra's Test Project ID"
+  command:
+    required: true
+    description: "Command to run your tests"
+  github_token:
+    required: false
+    description: "Github Token to comment a message to the linked PR"
+  message:
+    required: false
+    description: "A message to comment to the linked PR"
+runs:
+  using: "node12"
+  main: "dist/index.js"
+branding:
+  icon: "cloud-lightning"
+  color: "yellow"
