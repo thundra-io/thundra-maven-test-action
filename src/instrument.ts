@@ -2,34 +2,39 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
 import { resolve } from 'path'
+import { getVersion } from './version'
 
 const THUNDRA_AGENT_REPOSITORY =
     'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar'
 
-const MAVEN_INSTRUMENTATION_SCRIPT =
-    'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/0.0.2/thundra-agent-maven-test-instrumentation-0.0.2.jar'
+const MAVEN_INSTRUMENTATION_METADATA =
+    'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml'
 
-export async function instrument(command: string): Promise<void> {
-    if (command === null) {
-        throw new Error('Command must be present')
+export async function instrument(instrumenter_version?: string): Promise<void> {
+    const mavenInstrumenterVersion: string | undefined = await getVersion(
+        MAVEN_INSTRUMENTATION_METADATA,
+        instrumenter_version
+    )
+    if (!mavenInstrumenterVersion) {
+        core.warning("> Couldn't find an available version for Thundra Maven Instrumentation script")
+        core.warning('> Instrumentation failed!')
+        return
     }
 
     core.info('> Downloading the agent...')
     const agentPath = await tc.downloadTool(THUNDRA_AGENT_REPOSITORY)
     core.info(`> Successfully downloaded the agent to ${agentPath}`)
 
-    core.info('> Downloading the maven instrumentator')
-    const mvnInstrumentatorPath = await tc.downloadTool(
-        MAVEN_INSTRUMENTATION_SCRIPT
+    core.info('> Downloading the maven instrumentater')
+    const mvnInstrumentaterPath = await tc.downloadTool(
+        `https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`
     )
-    core.info(
-        `> Successfully downloaded the maven instrumentator to ${mvnInstrumentatorPath}`
-    )
+    core.info(`> Successfully downloaded the maven instrumentater to ${mvnInstrumentaterPath}`)
 
     core.info('> Updating pom.xml...')
-    await exec.exec(
-        `sh -c "find ${process.cwd()} -name \\"pom.xml\\" -exec java -jar ${mvnInstrumentatorPath} ${agentPath} {} \\;"`
-    )
+
+    await exec.exec(`sh -c "POMS=$(find ${process.cwd()} -name \\"pom.xml\\" -exec echo '{}' +)"`)
+    await exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} $POMS"`)
     core.info('> Update to pom.xml is done')
 
     resolve('Done!')

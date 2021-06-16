@@ -29,7 +29,11 @@
     "@actions/exec": "^1.0.4",
     "@actions/github": "^5.0.0",
     "@actions/io": "^1.1.0",
-    "@actions/tool-cache": "^1.6.1"
+    "@actions/tool-cache": "^1.6.1",
+    "@types/node-fetch": "^2.5.10",
+    "@types/xml2js": "^0.4.8",
+    "node-fetch": "^2.6.1",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",

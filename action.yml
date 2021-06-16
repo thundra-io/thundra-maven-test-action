@@ -9,14 +9,14 @@ inputs:
     required: false
     description: "Thundra's Test Project ID"
   command:
-    required: true
+    required: false
     description: "Command to run your tests"
-  github_token:
+  instrumenter_version:
     required: false
-    description: "Github Token to comment a message to the linked PR"
-  message:
+    description: "Use a specific version of the Maven instrumentation script"
+  agent_version:
     required: false
-    description: "A message to comment to the linked PR"
+    description: "Use a specific version of the Thundra Agent"
 runs:
   using: "node12"
   main: "dist/index.js"
