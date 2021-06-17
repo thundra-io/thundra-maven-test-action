@@ -35,7 +35,7 @@ export async function instrument(instrumenter_version?: string): Promise<void> {
 
     const poms = await exec.getExecOutput(`sh -c "find ${process.cwd()} -name \\"pom.xml\\" -exec echo '{}' +"`)
     if (poms.stdout && poms.stdout.trim()) {
-        await exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} \\"${poms.stdout}\\" "`)
+        await exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} \\"${poms.stdout.trim()}\\""`)
         core.info('> Update to pom.xml is done')
     } else {
         core.warning("> Couldn't find any pom.xml files. Exiting the instrumentation step.")

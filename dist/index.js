@@ -61,7 +61,7 @@ function instrument(instrumenter_version) {
         core.info('> Updating pom.xml...');
         const poms = yield exec.getExecOutput(`sh -c "find ${process.cwd()} -name \\"pom.xml\\" -exec echo '{}' +"`);
         if (poms.stdout && poms.stdout.trim()) {
-            yield exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} \\"${poms.stdout}\\" "`);
+            yield exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} \\"${poms.stdout.trim()}\\""`);
             core.info('> Update to pom.xml is done');
         }
         else {
