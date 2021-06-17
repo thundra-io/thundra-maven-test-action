@@ -59,10 +59,15 @@ function instrument(instrumenter_version) {
         const mvnInstrumentaterPath = yield tc.downloadTool(`https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`);
         core.info(`> Successfully downloaded the maven instrumentater to ${mvnInstrumentaterPath}`);
         core.info('> Updating pom.xml...');
-        yield exec.exec(`sh -c "POMS=$(find ${process.cwd()} -name \\"pom.xml\\" -exec echo '{}' +)"`);
-        yield exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} $POMS"`);
-        core.info('> Update to pom.xml is done');
-        path_1.resolve('Done!');
+        const poms = yield exec.getExecOutput(`sh -c "find ${process.cwd()} -name \\"pom.xml\\" -exec echo '{}' +"`);
+        if (poms.stdout && poms.stdout.trim()) {
+            yield exec.exec(`sh -c "java -jar ${mvnInstrumentaterPath} ${agentPath} ${poms.stdout}"`);
+            core.info('> Update to pom.xml is done');
+        }
+        else {
+            core.warning("> Couldn't find any pom.xml files. Exiting the instrumentation step.");
+        }
+        path_1.resolve('Instrumentation is completed.');
     });
 }
 exports.instrument = instrument;
