@@ -7,7 +7,7 @@ const apikey: string = core.getInput('apikey', { required: true })
 const project_id: string = core.getInput('project_id')
 const command: string = core.getInput('command')
 const instrumenter_version: string = core.getInput('instrumenter_version')
-// const agent_version: string = core.getInput('agent_version')
+const agent_version: string = core.getInput('agent_version')
 
 // Setting environment variables programmatically
 core.exportVariable('THUNDRA_APIKEY', apikey)
@@ -19,7 +19,7 @@ async function run(): Promise<void> {
 
         core.startGroup('[Thundra] Instrumentation')
         core.info(`> Instrumenting the application`)
-        await instrument(instrumenter_version)
+        await instrument(instrumenter_version, agent_version)
         core.endGroup()
 
         if (command) {
