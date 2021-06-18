@@ -9,7 +9,7 @@ export async function getVersion(url: string, version?: string): Promise<string 
     const latestVersion: string = json.metadata.versioning[0].release[0]
 
     if (version && availableVersions.find(v => v === version)) {
-        return availableVersions.find(v => v === version)
+        return version
     } else {
         return latestVersion
     }
