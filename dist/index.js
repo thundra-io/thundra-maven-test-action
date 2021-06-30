@@ -119,7 +119,9 @@ const instrumenter_version = core.getInput('instrumenter_version');
 // const agent_version: string = core.getInput('agent_version')
 // Setting environment variables programmatically
 core.exportVariable('THUNDRA_APIKEY', apikey);
-core.exportVariable('THUNDRA_AGENT_TEST_PROJECT_ID', project_id);
+if (project_id) {
+    core.exportVariable('THUNDRA_AGENT_TEST_PROJECT_ID', project_id);
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -171,7 +173,7 @@ function getVersion(url, version) {
         const availableVersions = json.metadata.versioning[0].versions[0].version;
         const latestVersion = json.metadata.versioning[0].release[0];
         if (version && availableVersions.find(v => v === version)) {
-            return availableVersions.find(v => v === version);
+            return version;
         }
         else {
             return latestVersion;
