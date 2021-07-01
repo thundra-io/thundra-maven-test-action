@@ -23,6 +23,24 @@ steps:
     uses: thundra-io/thundra-maven-test-action@v1
     with:
       apikey: ${{ secrets.THUNDRA_APIKEY }}
+      command: mvn clean install
+```
+
+### Manual Usage
+
+```yaml
+# ...
+
+steps:
+  - uses: actions/checkout@v2
+  - name: Set up JDK 1.8
+    uses: actions/setup-java@v1
+    with:
+      java-version: 1.8
+  - name: Thundra Maven Test Instrumentation
+    uses: thundra-io/thundra-maven-test-action@v1
+    with:
+      apikey: ${{ secrets.THUNDRA_APIKEY }}
   - name: Run mvn command
     run: mvn clean install
 ```
