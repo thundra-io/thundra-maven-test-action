@@ -43,7 +43,6 @@ const tc = __importStar(__webpack_require__(7784));
 const path_1 = __webpack_require__(5622);
 const version_1 = __webpack_require__(8217);
 const THUNDRA_AGENT_METADATA = 'https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/maven-metadata.xml';
-// 'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar'
 const MAVEN_INSTRUMENTATION_METADATA = 'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml';
 function instrument(instrumenter_version, agent_version) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -6,7 +6,6 @@ import { getVersion } from './version'
 
 const THUNDRA_AGENT_METADATA =
     'https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/maven-metadata.xml'
-// 'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar'
 
 const MAVEN_INSTRUMENTATION_METADATA =
     'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml'
