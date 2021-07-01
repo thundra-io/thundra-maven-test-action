@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
+import * as semver from 'semver'
 
 import { instrument } from './instrument'
 
@@ -14,6 +15,10 @@ core.exportVariable('THUNDRA_APIKEY', apikey)
 
 if (project_id) {
     core.exportVariable('THUNDRA_AGENT_TEST_PROJECT_ID', project_id)
+}
+
+if (agent_version && semver.lt(agent_version, '2.7.0')) {
+    core.setFailed(`Thundra Java Agent prior to 2.7.0 doesn't work with this action`)
 }
 
 async function run(): Promise<void> {

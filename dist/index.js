@@ -118,6 +118,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(2186));
 const exec = __importStar(__webpack_require__(1514));
+const semver = __importStar(__webpack_require__(5911));
 const instrument_1 = __webpack_require__(2148);
 const apikey = core.getInput('apikey', { required: true });
 const project_id = core.getInput('project_id');
@@ -128,6 +129,9 @@ const agent_version = core.getInput('agent_version');
 core.exportVariable('THUNDRA_APIKEY', apikey);
 if (project_id) {
     core.exportVariable('THUNDRA_AGENT_TEST_PROJECT_ID', project_id);
+}
+if (agent_version && semver.lt(agent_version, '2.7.0')) {
+    core.setFailed(`Thundra Java Agent prior to 2.7.0 doesn't work with this action`);
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
