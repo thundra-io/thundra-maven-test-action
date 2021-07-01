@@ -4,13 +4,14 @@ import * as tc from '@actions/tool-cache'
 import { resolve } from 'path'
 import { getVersion } from './version'
 
-const THUNDRA_AGENT_REPOSITORY =
-    'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar'
+const THUNDRA_AGENT_METADATA =
+    'https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/maven-metadata.xml'
+// 'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar'
 
 const MAVEN_INSTRUMENTATION_METADATA =
     'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml'
 
-export async function instrument(instrumenter_version?: string): Promise<void> {
+export async function instrument(instrumenter_version?: string, agent_version?: string): Promise<void> {
     const mavenInstrumenterVersion: string | undefined = await getVersion(
         MAVEN_INSTRUMENTATION_METADATA,
         instrumenter_version
@@ -21,8 +22,17 @@ export async function instrument(instrumenter_version?: string): Promise<void> {
         return
     }
 
+    const thundraAgentVersion: string | undefined = await getVersion(THUNDRA_AGENT_METADATA, agent_version)
+    if (!thundraAgentVersion) {
+        core.warning("> Couldn't find an available version for Thundra Agent")
+        core.warning('> Instrumentation failed!')
+        return
+    }
+
     core.info('> Downloading the agent...')
-    const agentPath = await tc.downloadTool(THUNDRA_AGENT_REPOSITORY)
+    const agentPath = await tc.downloadTool(
+        `https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/${thundraAgentVersion}/thundra-agent-bootstrap-${thundraAgentVersion}.jar`
+    )
     core.info(`> Successfully downloaded the agent to ${agentPath}`)
 
     core.info('> Downloading the maven instrumentater')

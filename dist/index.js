@@ -42,9 +42,10 @@ const exec = __importStar(__webpack_require__(1514));
 const tc = __importStar(__webpack_require__(7784));
 const path_1 = __webpack_require__(5622);
 const version_1 = __webpack_require__(8217);
-const THUNDRA_AGENT_REPOSITORY = 'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar';
+const THUNDRA_AGENT_METADATA = 'https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/maven-metadata.xml';
+// 'https://thundra-release-lab.s3-us-west-2.amazonaws.com/thundra-agent/thundra-agent-bootstrap.jar'
 const MAVEN_INSTRUMENTATION_METADATA = 'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml';
-function instrument(instrumenter_version) {
+function instrument(instrumenter_version, agent_version) {
     return __awaiter(this, void 0, void 0, function* () {
         const mavenInstrumenterVersion = yield version_1.getVersion(MAVEN_INSTRUMENTATION_METADATA, instrumenter_version);
         if (!mavenInstrumenterVersion) {
@@ -52,8 +53,14 @@ function instrument(instrumenter_version) {
             core.warning('> Instrumentation failed!');
             return;
         }
+        const thundraAgentVersion = yield version_1.getVersion(THUNDRA_AGENT_METADATA, agent_version);
+        if (!thundraAgentVersion) {
+            core.warning("> Couldn't find an available version for Thundra Agent");
+            core.warning('> Instrumentation failed!');
+            return;
+        }
         core.info('> Downloading the agent...');
-        const agentPath = yield tc.downloadTool(THUNDRA_AGENT_REPOSITORY);
+        const agentPath = yield tc.downloadTool(`https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/${thundraAgentVersion}/thundra-agent-bootstrap-${thundraAgentVersion}.jar`);
         core.info(`> Successfully downloaded the agent to ${agentPath}`);
         core.info('> Downloading the maven instrumentater');
         const mvnInstrumentaterPath = yield tc.downloadTool(`https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`);
@@ -111,16 +118,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(2186));
 const exec = __importStar(__webpack_require__(1514));
+const semver = __importStar(__webpack_require__(5911));
 const instrument_1 = __webpack_require__(2148);
 const apikey = core.getInput('apikey', { required: true });
 const project_id = core.getInput('project_id');
 const command = core.getInput('command');
 const instrumenter_version = core.getInput('instrumenter_version');
-// const agent_version: string = core.getInput('agent_version')
+const agent_version = core.getInput('agent_version');
 // Setting environment variables programmatically
 core.exportVariable('THUNDRA_APIKEY', apikey);
 if (project_id) {
     core.exportVariable('THUNDRA_AGENT_TEST_PROJECT_ID', project_id);
+}
+if (agent_version && semver.lt(agent_version, '2.7.0')) {
+    core.setFailed(`Thundra Java Agent prior to 2.7.0 doesn't work with this action`);
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -128,7 +139,7 @@ function run() {
             core.info(`[Thundra] Initializing the Thundra Action...`);
             core.startGroup('[Thundra] Instrumentation');
             core.info(`> Instrumenting the application`);
-            yield instrument_1.instrument(instrumenter_version);
+            yield instrument_1.instrument(instrumenter_version, agent_version);
             core.endGroup();
             if (command) {
                 core.info(`[Thundra] Executing the command`);
