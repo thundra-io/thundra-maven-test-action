@@ -11,6 +11,8 @@ const MAVEN_INSTRUMENTATION_METADATA =
     'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml'
 
 export async function instrument(instrumenter_version?: string, agent_version?: string): Promise<void> {
+    let agentPath: string
+
     const mavenInstrumenterVersion: string | undefined = await getVersion(
         MAVEN_INSTRUMENTATION_METADATA,
         instrumenter_version
@@ -28,11 +30,16 @@ export async function instrument(instrumenter_version?: string, agent_version?: 
         return
     }
 
-    core.info('> Downloading the agent...')
-    const agentPath = await tc.downloadTool(
-        `https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/${thundraAgentVersion}/thundra-agent-bootstrap-${thundraAgentVersion}.jar`
-    )
-    core.info(`> Successfully downloaded the agent to ${agentPath}`)
+    if (process.env.LOCAL_AGENT_PATH) {
+        agentPath = process.env.LOCAL_AGENT_PATH
+        core.info(`> Using the local agent at ${agentPath}`)
+    } else {
+        core.info('> Downloading the agent...')
+        agentPath = await tc.downloadTool(
+            `https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/${thundraAgentVersion}/thundra-agent-bootstrap-${thundraAgentVersion}.jar`
+        )
+        core.info(`> Successfully downloaded the agent to ${agentPath}`)
+    }
 
     core.info('> Downloading the maven instrumentater')
     const mvnInstrumentaterPath = await tc.downloadTool(
