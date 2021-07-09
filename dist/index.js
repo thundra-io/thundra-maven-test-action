@@ -46,6 +46,7 @@ const THUNDRA_AGENT_METADATA = 'https://repo.thundra.io/service/local/repositori
 const MAVEN_INSTRUMENTATION_METADATA = 'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml';
 function instrument(instrumenter_version, agent_version) {
     return __awaiter(this, void 0, void 0, function* () {
+        let agentPath;
         const mavenInstrumenterVersion = yield version_1.getVersion(MAVEN_INSTRUMENTATION_METADATA, instrumenter_version);
         if (!mavenInstrumenterVersion) {
             core.warning("> Couldn't find an available version for Thundra Maven Instrumentation script");
@@ -58,9 +59,15 @@ function instrument(instrumenter_version, agent_version) {
             core.warning('> Instrumentation failed!');
             return;
         }
-        core.info('> Downloading the agent...');
-        const agentPath = yield tc.downloadTool(`https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/${thundraAgentVersion}/thundra-agent-bootstrap-${thundraAgentVersion}.jar`);
-        core.info(`> Successfully downloaded the agent to ${agentPath}`);
+        if (process.env.LOCAL_AGENT_PATH) {
+            agentPath = process.env.LOCAL_AGENT_PATH;
+            core.info(`> Using the local agent at ${agentPath}`);
+        }
+        else {
+            core.info('> Downloading the agent...');
+            agentPath = yield tc.downloadTool(`https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/${thundraAgentVersion}/thundra-agent-bootstrap-${thundraAgentVersion}.jar`);
+            core.info(`> Successfully downloaded the agent to ${agentPath}`);
+        }
         core.info('> Downloading the maven instrumentater');
         const mvnInstrumentaterPath = yield tc.downloadTool(`https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`);
         core.info(`> Successfully downloaded the maven instrumentater to ${mvnInstrumentaterPath}`);
