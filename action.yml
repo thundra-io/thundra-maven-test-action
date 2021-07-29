@@ -3,10 +3,10 @@ description: "Thundra Maven Test Instrumentation"
 author: "Oguzhan Ozdemir <oguzhan.ozdemir@thundra.io>"
 inputs:
   apikey:
-    required: true
+    required: false
     description: "Thundra's API Key"
   project_id:
-    required: true
+    required: false
     description: "Thundra's Test Project ID"
   command:
     required: false
