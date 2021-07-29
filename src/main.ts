@@ -11,15 +11,15 @@ const instrumenter_version: string = core.getInput('instrumenter_version')
 const agent_version: string = core.getInput('agent_version')
 
 if (!apikey) {
-    core.error('Thundra API Key is not present. Exiting early...')
-    core.error('Instrumentation failed.')
+    core.warning('Thundra API Key is not present. Exiting early...')
+    core.warning('Instrumentation failed.')
 
     process.exit(core.ExitCode.Success)
 }
 
 if (!project_id) {
-    core.error('Thundra Project ID is not present. Exiting early...')
-    core.error('Instrumentation failed.')
+    core.warning('Thundra Project ID is not present. Exiting early...')
+    core.warning('Instrumentation failed.')
 
     process.exit(core.ExitCode.Success)
 }
