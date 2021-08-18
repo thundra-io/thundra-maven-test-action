@@ -17,11 +17,11 @@ Once you get the Thundra API Key, make sure to set it as a secret. A sample Gith
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest      
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
-      - uses: actions/setup-java@v2
+        uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '8'
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
-      - uses: actions/setup-java@v2
+        uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '8'
