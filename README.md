@@ -54,7 +54,7 @@ jobs:
           apikey: ${{ secrets.THUNDRA_APIKEY }}
           project_id: ${{ secrets.THUNDRA_PROJECT_ID }}
       - name: Run mvn command
-        run: mvn clean install
+        run: mvn clean verify
 ```
 
 ## Known Issues
