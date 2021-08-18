@@ -15,38 +15,46 @@ Once you get the Thundra API Key, make sure to set it as a secret. A sample Gith
 ```yaml
 # ...
 
-steps:
-  - uses: actions/checkout@v2
-  - name: Set up JDK 1.8
-    uses: actions/setup-java@v1
-    with:
-      java-version: 1.8
-  - name: Thundra Maven Test Instrumentation
-    uses: thundra-io/thundra-maven-test-action@v1
-    with:
-      apikey: ${{ secrets.THUNDRA_APIKEY }}
-      project_id: ${{ secrets.THUNDRA_PROJECT_ID }}
-      command: mvn clean install
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+      - name: Thundra Maven Test Instrumentation
+        uses: thundra-io/thundra-maven-test-action@v1
+        with:
+          apikey: ${{ secrets.THUNDRA_APIKEY }}
+          project_id: ${{ secrets.THUNDRA_PROJECT_ID }}
+          command: mvn clean install
 ```
 
-### Manual Usage
+### Running the Command Separately
 
 ```yaml
 # ...
 
-steps:
-  - uses: actions/checkout@v2
-  - name: Set up JDK 1.8
-    uses: actions/setup-java@v1
-    with:
-      java-version: 1.8
-  - name: Thundra Maven Test Instrumentation
-    uses: thundra-io/thundra-maven-test-action@v1
-    with:
-      apikey: ${{ secrets.THUNDRA_APIKEY }}
-      project_id: ${{ secrets.THUNDRA_PROJECT_ID }}
-  - name: Run mvn command
-    run: mvn clean install
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+      - name: Thundra Maven Test Instrumentation
+        uses: thundra-io/thundra-maven-test-action@v1
+        with:
+          apikey: ${{ secrets.THUNDRA_APIKEY }}
+          project_id: ${{ secrets.THUNDRA_PROJECT_ID }}
+      - name: Run mvn command
+        run: mvn clean install
 ```
 
 ## Known Issues
