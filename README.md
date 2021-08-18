@@ -33,7 +33,7 @@ jobs:
           command: mvn clean verify
 ```
 
-### Manual Usage
+### Running the Command Separately
 
 ```yaml
 # ...
