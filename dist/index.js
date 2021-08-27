@@ -131,6 +131,7 @@ const project_id = core.getInput('project_id');
 const command = core.getInput('command');
 const instrumenter_version = core.getInput('instrumenter_version');
 const agent_version = core.getInput('agent_version');
+const parent_pom_path = core.getInput('parent_pom_path');
 if (!apikey) {
     core.warning('Thundra API Key is not present. Exiting early...');
     core.warning('Instrumentation failed.');
@@ -144,6 +145,7 @@ if (!project_id) {
 // Setting environment variables programmatically
 core.exportVariable('THUNDRA_APIKEY', apikey);
 core.exportVariable('THUNDRA_AGENT_TEST_PROJECT_ID', project_id);
+core.exportVariable('THUNDRA_MAVEN_INSTRUMENTATION_PARENT_POM', parent_pom_path);
 if (agent_version && semver.lt(agent_version, '2.7.0')) {
     core.setFailed(`Thundra Java Agent prior to 2.7.0 doesn't work with this action`);
 }

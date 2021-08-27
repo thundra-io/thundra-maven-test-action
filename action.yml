@@ -17,6 +17,9 @@ inputs:
   agent_version:
     required: false
     description: "Use a specific version of the Thundra Agent"
+  parent_pom_path:
+    required: false
+    description: "Use if your parent pom is in somewhere other that ./pom.xml"
 runs:
   using: "node12"
   main: "dist/index.js"
