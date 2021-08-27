@@ -43,7 +43,7 @@ const tc = __importStar(__webpack_require__(7784));
 const path_1 = __webpack_require__(5622);
 const version_1 = __webpack_require__(8217);
 const THUNDRA_AGENT_METADATA = 'https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/maven-metadata.xml';
-const MAVEN_INSTRUMENTATION_METADATA = 'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml';
+const MAVEN_INSTRUMENTATION_METADATA = 'https://repo1.maven.org/maven2/io/thundra/plugin/thundra-agent-maven-test-instrumentation/maven-metadata.xml';
 function instrument(instrumenter_version, agent_version) {
     return __awaiter(this, void 0, void 0, function* () {
         let agentPath;
@@ -69,7 +69,7 @@ function instrument(instrumenter_version, agent_version) {
             core.info(`> Successfully downloaded the agent to ${agentPath}`);
         }
         core.info('> Downloading the maven instrumentater');
-        const mvnInstrumentaterPath = yield tc.downloadTool(`https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`);
+        const mvnInstrumentaterPath = yield tc.downloadTool(`https://repo1.maven.org/maven2/io/thundra/plugin/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`);
         core.info(`> Successfully downloaded the maven instrumentater to ${mvnInstrumentaterPath}`);
         core.info('> Updating pom.xml...');
         const poms = yield exec.getExecOutput(`sh -c "find ${process.cwd()} -name \\"pom.xml\\" -exec echo '{}' +"`);

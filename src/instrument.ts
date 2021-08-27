@@ -8,7 +8,7 @@ const THUNDRA_AGENT_METADATA =
     'https://repo.thundra.io/service/local/repositories/thundra-releases/content/io/thundra/agent/thundra-agent-bootstrap/maven-metadata.xml'
 
 const MAVEN_INSTRUMENTATION_METADATA =
-    'https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/maven-metadata.xml'
+    'https://repo1.maven.org/maven2/io/thundra/plugin/thundra-agent-maven-test-instrumentation/maven-metadata.xml'
 
 export async function instrument(instrumenter_version?: string, agent_version?: string): Promise<void> {
     let agentPath: string
@@ -43,7 +43,7 @@ export async function instrument(instrumenter_version?: string, agent_version?: 
 
     core.info('> Downloading the maven instrumentater')
     const mvnInstrumentaterPath = await tc.downloadTool(
-        `https://repo1.maven.org/maven2/io/thundra/agent/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`
+        `https://repo1.maven.org/maven2/io/thundra/plugin/thundra-agent-maven-test-instrumentation/${mavenInstrumenterVersion}/thundra-agent-maven-test-instrumentation-${mavenInstrumenterVersion}.jar`
     )
     core.info(`> Successfully downloaded the maven instrumentater to ${mvnInstrumentaterPath}`)
 
